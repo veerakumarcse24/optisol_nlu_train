@@ -1,0 +1,24 @@
+<div class="jumbotron">
+  <h3>Intent Grid</h3>
+  <hr>
+  <div class="container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th align="center">S.NO</th>
+          <th align="center">Intent</th>
+          <th align="center">Text</th>
+          <th align="center">Entity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="intentData in vmIntentGrid.trainData.rasa_nlu_data.common_examples">
+          <td>{{$index}}</td>
+          <td><input type="text" ng-model="intentData.intent" name="{{$index}}_intent" /></td>
+          <td><input type="text" ng-model="intentData.text" name="{{$index}}_text" /></td>
+          <td><i class="glyphicon glyphicon-plus-sign icons_size pointer" style="color:lightblue;"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
