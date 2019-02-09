@@ -7,6 +7,10 @@
 
 body {
   padding: 0;
+  background-image: url("../images/background_img.jpg");
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-attachment: fixed;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -59,10 +63,16 @@ body {
   margin-top: 28px;
 }
 
+
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
-    max-width: 730px;
+    max-width: 810px;
+  }
+
+  .modal-dialog {
+    width: 820px; /* New width for default modal */
   }
 
   /* Remove the padding we set earlier */
@@ -79,5 +89,7 @@ body {
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
     border-bottom: 0;
+    color: #f9f9f9;
+    background-color: rgba(114, 153, 212, 0.58);     
   }
 }

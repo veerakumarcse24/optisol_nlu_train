@@ -1,35 +1,143 @@
+<div class="row">
+  <div class="col-md-5 form-group has-feedback has-search">
+      <span class="glyphicon glyphicon-search form-control-feedback" style="margin-left: 1em;"></span>
+      <input type="text" style="color: white;" class="form-control" placeholder="Search text here ..." ng-model="vmIntentGrid.searchText" ng-keyup="vmIntentGrid.searchMethod()">
+  </div>
+  <div class="col-md-5">
+    <select class="w3-select" name="filter_intent" ng-model="vmIntentGrid.dropDownIntent" ng-change="vmIntentGrid.searchMethod()">
+      <option value="" selected>Choose Intent</option>
+      <option ng-repeat="dropData in vmIntentGrid.dropdwonSourceData | unique:'intent'" value="{{dropData.intent}}">{{dropData.intent}}</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary" ng-click="vmIntentGrid.createIntent()">New Intent</button>
+  </div>
+</div>
 <div class="jumbotron">
   <h3>Intent Grid</h3>
   <hr>
-  <div class="container">
-    <table class="table table-striped">
+  <div class="container" ng-if="vmIntentGrid.filteredIntents.length > 0">
+    <table class="table-responsive table-condensed">
       <thead>
         <tr>
-          <th align="center">S.NO</th>
-          <th align="center">Intent</th>
-          <th align="center">Text</th>
-          <th align="center">Entity</th>
+          <th align="center" width="5%">S.NO</th>
+          <th align="center" width="45%">Intent</th>
+          <th align="center" width="45%">Text</th>
+          <th align="center" width="5%">Entity</th>
+          <th align="center" width="5%">Remove</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="intentData in vmIntentGrid.trainData.rasa_nlu_data.common_examples">
-          <td>{{$index}}</td>
-          <td><input type="text" ng-model="intentData.intent" name="{{$index}}_intent" /></td>
-          <td><input type="text" ng-model="intentData.text" name="{{$index}}_text" /></td>
-          <td><i class="glyphicon glyphicon-plus-sign icons_size pointer" style="color:lightblue;" ng-click="vmIntentGrid.addEntity($index)"></i></td>
+        <tr ng-repeat="intentData in vmIntentGrid.paginizedData">
+          <td>{{$index + 1}}</td>
+          <td><input readonly type="text" ng-model="intentData.intent" name="{{$index}}_intent" class="w3-input" /></td>
+          <td><input readonly type="text" ng-model="intentData.text" name="{{$index}}_text" class="w3-input" /></td>
+          <td><i uib-tooltip="Edit Entity" class="glyphicon glyphicon-edit icons_size pointer" style="color:#5ad870;" ng-click="vmIntentGrid.addIntent($index)" tooltip-placement="left"></i></td>
+          <td><i uib-tooltip="Remove Intent" class="glyphicon glyphicon-minus-sign icons_size pointer" style="color:#ea7d7d;" ng-click="vmIntentGrid.removeIntent($index)" tooltip-placement="left"></i></td>
         </tr>
       </tbody>
     </table>
+    <ul uib-pagination items-per-page="vmIntentGrid.itemsPerPage" max-size="10" total-items="vmIntentGrid.filteredIntents.length" ng-model="vmIntentGrid.currentPage" ng-change="vmIntentGrid.paginationMethod()" class="pagination-sm" boundary-link-numbers="true" rotate="false" ></ul>
   </div>
+  <div ng-if="vmIntentGrid.filteredIntents.length == 0">
+    No Record Found.
+  </div>
+  <a href="#!/" style="float: left;" uib-tooltip="Goto Home" tooltip-placement="right">Back</a>
+  <button uib-tooltip="Save Intents" tooltip-placement="left" type="button" class="btn btn-link save_btn">Save <i style="margin-left: 5px;" class=" glyphicon glyphicon-save"></i></button>
 </div>
 <script type="text/ng-template" id="addEntity.html">
    <div class="modal-header">
-     <h4 class="modal-title" id="myModalLabel">Entity Details</h4>
+    <span class="f-r">
+      <i class="glyphicon glyphicon-remove-sign close_icon" ng-click="vmIntentGrid.revertEntity(vmIntentGrid.selectedIndexVal)"></i>
+    </span>
+    <h4 class="modal-title f-l my_model_title" id="myModalLabel"><i class="glyphicon glyphicon-book"></i> Entity Details</h4>
    </div>
    <div class="modal-body text-center">
-      Text : <input type="text" name="selected_text" ng-model="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text" />
-      Intent : <input type="text" name="selected_intent" ng-model="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent" />
-      <i class="glyphicon glyphicon-plus-sign icons_size pointer" style="color:lightgreen;" ng-click="vmIntentGrid.addNewEntity(vmIntentGrid.selectedIndexVal)"></i>
+    <div class="row" style="text-align: center">
+      <div class="col-md-5">
+        <label>Text</label>
+        <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].text" placeholder="Text">
+      </div>
+      <div class="col-md-1">
+        <i ng-if="!vmIntentGrid.newIntentIcon" uib-tooltip="New Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-left" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
+        <i ng-if="vmIntentGrid.newIntentIcon" uib-tooltip="Load Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-right" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
+      </div>
+      <div class="col-md-4">
+        <label>Intent</label>
+        <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent"/>
+        <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="filter_intent"  style="color:black;" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].intent">
+          <option value="" selected>Choose Intent</option>
+          <option ng-repeat="dropData in vmIntentGrid.dropdwonSourceData | unique:'intent'" value="{{dropData.intent}}">{{dropData.intent}}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;" ng-click="vmIntentGrid.addNewEntity(vmIntentGrid.selectedIndexVal)"></i>
+      </div>
+    </div>
+     <hr>
+    <div class="container">
+      <table class="table table-striped" ng-if="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].entities.length > 0">
+        <thead>
+          <tr>
+            <th align="center">S.NO</th>
+            <th align="center">Value</th>
+            <th align="center">Entity</th>
+            <th align="center">Start</th>
+            <th align="center">End</th>
+            <th align="center">Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="entityData in vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].entities">
+            <td>{{$index+1}}</td>
+            <td><input class="w3-input" type="text" ng-model="entityData.value"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><input class="w3-input" type="text" ng-model="entityData.entity"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><input class="w3-input" type="number" ng-model="entityData.start"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><input class="w3-input" type="number" ng-model="entityData.end"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><i class="glyphicon glyphicon-minus-sign pointer minus_size" ng-click="vmIntentGrid.removeEntity(vmIntentGrid.selectedIndexVal, $index)"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+     <div class="row m-t-20">
+       <div class="col-xs-5 text-left">
+         <button class="btn  back_button cancel_back_btn" type="button" ng-click="vmIntentGrid.revertEntity(vmIntentGrid.selectedIndexVal)">Cancel </button>
+       </div>
+       <div class="col-xs-7 text-right">
+         <button class="btn btn-info" type="button" ng-click="vmIntentGrid.closePopup()">Save <i class="glyphicon glyphicon-ok"></i></button>
+       </div>
+     </div>
+   </div>
+</script>
+<script type="text/ng-template" id="addIntent.html">
+   <div class="modal-header">
+    <span class="f-r">
+      <i class="glyphicon glyphicon-remove-sign close_icon" ng-click="vmIntentGrid.create_revertEntity(vmIntentGrid.selectedIndexVal)"></i>
+    </span>
+    <h4 class="modal-title f-l my_model_title" id="myModalLabel"><i class="glyphicon glyphicon-folder-open" style="margin-right:5px;"></i> Create Intent</h4>
+   </div>
+   <div class="modal-body text-center">
+    <div class="row" style="text-align: center">
+      <div class="col-md-5">
+        <label>Text</label>
+        <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text" placeholder="Text">
+      </div>
+      <div class="col-md-1">
+        <i ng-if="!vmIntentGrid.newIntentIcon" uib-tooltip="New Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-left" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
+        <i ng-if="vmIntentGrid.newIntentIcon" uib-tooltip="Load Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-right" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
+      </div>
+      <div class="col-md-4">
+        <label>Intent</label>
+        <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent"/>
+        <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="filter_intent"  style="color:black;" ng-model="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent">
+          <option value="" selected>Choose Intent</option>
+          <option ng-repeat="dropData in vmIntentGrid.dropdwonSourceData | unique:'intent'" value="{{dropData.intent}}">{{dropData.intent}}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;" ng-click="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push({});"></i>
+      </div>
+    </div>
      <hr>
     <div class="container">
       <table class="table table-striped" ng-if="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.length > 0">
@@ -45,22 +153,22 @@
         </thead>
         <tbody>
           <tr ng-repeat="entityData in vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities">
-            <td>{{$index}}</td>
-            <td><input type="text" ng-model="entityData.value"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
-            <td><input type="text" ng-model="entityData.entity"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
-            <td><input type="number" ng-model="entityData.start"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
-            <td><input type="number" ng-model="entityData.end"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
-            <td><i class="glyphicon glyphicon-minus-sign icons_size pointer" style="color:lightred;" ng-click="vmIntentGrid.removeEntity(vmIntentGrid.selectedIndexVal, $index)"></i></td>
+            <td>{{$index+1}}</td>
+            <td><input class="w3-input" type="text" ng-model="entityData.value"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><input class="w3-input" type="text" ng-model="entityData.entity"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><input class="w3-input" type="number" ng-model="entityData.start"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><input class="w3-input" type="number" ng-model="entityData.end"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><i class="glyphicon glyphicon-minus-sign pointer minus_size" ng-click="vmIntentGrid.creat_removeEntity(vmIntentGrid.selectedIndexVal, $index)"></i></td>
           </tr>
         </tbody>
       </table>
     </div>
      <div class="row m-t-20">
        <div class="col-xs-5 text-left">
-         <button class="btn  back_button cancel_back_btn" type="button" ng-click="vmIntentGrid.revertEntity(vmIntentGrid.selectedIndexVal)">Cancel</button>
+         <button class="btn  back_button cancel_back_btn" type="button" ng-click="vmIntentGrid.create_revertEntity(vmIntentGrid.selectedIndexVal)">Cancel </button>
        </div>
        <div class="col-xs-7 text-right">
-         <button class="btn user_create_btn" type="button" ng-click="vmIntentGrid.closePopup()">Save</button>
+         <button class="btn btn-info" type="button" ng-click="vmIntentGrid.create_closePopup()">Save <i class="glyphicon glyphicon-ok"></i></button>
        </div>
      </div>
    </div>

@@ -1,4 +1,75 @@
 .icons_size {
-  font-size: 15 px !important;
+  font-size: 25px;
+  margin-top: 1em;
 }
+
 .pointer {cursor: pointer;}
+
+.f-l {
+	float:left;
+}
+
+.f-r {
+	float: right;
+}
+
+.close_icon {
+	font-size: 23px;
+	color: #d80a43;
+}
+
+.my_model_title {
+	color: #30504f !important;
+}
+
+.company-logo{
+	width: 120px;
+	height: 100%;
+	margin-left: 10px;
+}
+
+input[type=text] {
+  background-color: transparent;
+}
+
+input[type=number]{
+    width: 4em;
+} 
+
+.add-m-t {
+	margin-top: 1em;
+}
+
+.minus_size {
+	font-size: 1em;
+	margin-top: 1em;
+}
+
+.has-search .form-control-feedback {
+    right: initial;
+    left: 0;
+    color: #ccc;
+}
+
+.has-search .form-control {
+    padding-right: 12px;
+    padding-left: 34px;
+}
+
+select {
+    background-color: transparent; 
+    color: white;
+}
+
+select option {
+  background-color: #2b3e4c;
+  color: white;
+}
+
+.save_btn {
+	padding: 10px 20px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+    float: right !important;
+    color: white !important;
+}
