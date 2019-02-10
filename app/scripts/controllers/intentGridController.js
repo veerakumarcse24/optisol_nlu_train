@@ -5,9 +5,9 @@
         .module('optisolNluTrainerApp')
         .controller('IntentGridCtrl', IntentGridCtrl);
 
-    IntentGridCtrl.$inject = ['$scope', '$location', '$filter','$rootScope', '$uibModal', '$cookies', '$http', 'UtilityService', 'filterFilter'];
+    IntentGridCtrl.$inject = ['$scope', '$location', '$filter','$rootScope', '$uibModal', '$cookies', '$http', 'UtilityService', 'filterFilter', 'Flash', 'MyService', 'TrainServices'];
 
-    function IntentGridCtrl($scope, $location, $filter, $rootScope, $cookies, $uibModal, $http, UtilityService, filterFilter) {
+    function IntentGridCtrl($scope, $location, $filter, $rootScope, $cookies, $uibModal, $http, UtilityService, filterFilter, Flash, MyService, TrainServices) {
         var vmIntentGrid = this;
         var self = this;
         self.scope = $scope;
@@ -20,31 +20,40 @@
 
         vmIntentGrid.onInit = function()
         {
-        	vmIntentGrid.getData();
-            vmIntentGrid.selectedIndexVal = null;
+          vmIntentGrid.selectedIndexVal = null;
+          vmIntentGrid.pageLoader = false;
+          if(!MyService.data)
+          {
+            $location.path('/');
+          }else{
+            vmIntentGrid.trainData = JSON.parse(MyService.data);
+            vmIntentGrid.dropdwonSourceData = angular.copy(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples);
+            vmIntentGrid.searchMethod();
+            vmIntentGrid.paginationMethod();
+          }
         }
 
-        vmIntentGrid.getData = function () {
+        /*vmIntentGrid.getData = function () {
 
-		   $http({
-		      method: 'GET',
-		      url: '/static/trainData.json'
-		   }).then(function (response){
-		   		vmIntentGrid.trainData = response.data;
-		   		vmIntentGrid.dropdwonSourceData = angular.copy(vmIntentGrid.trainData.rasa_nlu_data.common_examples);
-		   		vmIntentGrid.searchMethod();
-		   		vmIntentGrid.paginationMethod();
-		   },function (error){
-		   		console.log("Error getting trainData");
-		   });
-		}
+    		   $http({
+    		      method: 'GET',
+    		      url: '/static/trainData.json'
+    		   }).then(function (response){
+    		   		vmIntentGrid.trainData = response.data;
+    		   		vmIntentGrid.dropdwonSourceData = angular.copy(vmIntentGrid.trainData.rasa_nlu_data.common_examples);
+    		   		vmIntentGrid.searchMethod();
+    		   		vmIntentGrid.paginationMethod();
+    		   },function (error){
+    		   		console.log("Error getting trainData");
+    		   });
+    		}*/
 
 		vmIntentGrid.createIntent = function () {
-			vmIntentGrid.backIntent = angular.copy(vmIntentGrid.trainData.rasa_nlu_data.common_examples);
-            vmIntentGrid.selectedIndexVal = vmIntentGrid.trainData.rasa_nlu_data.common_examples.length;
+			vmIntentGrid.backIntent = angular.copy(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples);
+            vmIntentGrid.selectedIndexVal = vmIntentGrid.trainData.data.rasa_nlu_data.common_examples.length;
             var temp = {};
    			temp.entities = [];
-            vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal] = temp;
+            vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal] = temp;
             vmIntentGrid.newIntentIcon = false;
             UtilityService.openPopupWithBackdrop('addIntent.html', $scope);
         }
@@ -67,20 +76,20 @@
 
         vmIntentGrid.create_closePopup = function () {
             UtilityService.closePopup();
-            vmIntentGrid.dropdwonSourceData = angular.copy(vmIntentGrid.trainData.rasa_nlu_data.common_examples);
+            vmIntentGrid.dropdwonSourceData = angular.copy(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples);
             vmIntentGrid.searchText = '';
             vmIntentGrid.dropDownIntent = '';
             vmIntentGrid.searchMethod();
         }
 
         vmIntentGrid.create_revertEntity = function (indexVal) {
-            vmIntentGrid.trainData.rasa_nlu_data.common_examples = vmIntentGrid.backIntent;
+            vmIntentGrid.trainData.data.rasa_nlu_data.common_examples = vmIntentGrid.backIntent;
             UtilityService.closePopup();
         }
 
         vmIntentGrid.creat_removeEntity = function (intentIndex, entityIndex) {
             if ((entityIndex > -1) && (intentIndex > -1)) {
-              vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.splice(entityIndex, 1);
+              vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.splice(entityIndex, 1);
             }
         }
 
@@ -98,7 +107,7 @@
         vmIntentGrid.removeIntent = function (indexVal) {
         	if (indexVal > -1) {
         	  var target_index = ((vmIntentGrid.currentPage * vmIntentGrid.itemsPerPage) - vmIntentGrid.itemsPerPage) + indexVal;
-              vmIntentGrid.trainData.rasa_nlu_data.common_examples.splice(target_index, 1);
+              vmIntentGrid.trainData.data.rasa_nlu_data.common_examples.splice(target_index, 1);
         	  vmIntentGrid.searchMethod();
             }
         }
@@ -117,10 +126,45 @@
 
         vmIntentGrid.searchMethod = function()
         {
-        	vmIntentGrid.filteredIntents = filterFilter(vmIntentGrid.trainData.rasa_nlu_data.common_examples, {text:vmIntentGrid.searchText, intent:vmIntentGrid.dropDownIntent});		
+        	vmIntentGrid.filteredIntents = filterFilter(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples, {text:vmIntentGrid.searchText, intent:vmIntentGrid.dropDownIntent});		
         	vmIntentGrid.currentPage = 1;
         	vmIntentGrid.paginationMethod();
         }
+
+	    vmIntentGrid.saveJSON = function() {
+	      var json = vmIntentGrid.trainData;
+	      var jsonse = JSON.stringify(json);
+	      var blob = new Blob([jsonse], {
+	        type: "application/json"
+	      });
+	      $scope.filename = $scope.filename || "my_json";
+	      saveAs(blob, $scope.filename + ".json");
+	    }
+
+      vmIntentGrid.saveBack = function() {
+        MyService.update(vmIntentGrid.trainData);
+        $location.path('/');
+      }
+
+      vmIntentGrid.trainModel = function() {
+        UtilityService.openPopupWithBackdrop('trainModel.html', $scope);
+      }
+
+      vmIntentGrid.startTraing = function(){
+        vmIntentGrid.closePopup();
+        vmIntentGrid.pageLoader = true;
+        TrainServices.rasa_train(vmIntentGrid.trainData, vmIntentGrid.rasa_url, function (response) {
+            var res = response.data;
+            vmIntentGrid.pageLoader = false;
+            if (res.info) {
+                var message = res.info;
+                Flash.create('success', message);
+            } else {
+                var message = 'Some thing went wrong';
+                Flash.create('danger', message);
+            }
+        });
+      }
 
         vmIntentGrid.onInit();
     }

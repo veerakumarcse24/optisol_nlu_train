@@ -93,3 +93,26 @@ body {
     background-color: rgba(114, 153, 212, 0.58);     
   }
 }
+
+.alert.alert-success {
+  color: #7ae41f;
+  background-color: rgba(115, 117, 88, 0.44);     
+}
+
+.alert-dismissable .close, .alert-dismissible .close {
+    color: #fb0404;
+  }
+
+.alert.alert-danger {
+  color: #f70013;
+  background-color: rgba(138, 79, 84, 0.44);     
+}
+
+.alert-info {
+  color: #85fdff;
+  background-color: rgba(143, 212, 228, 0.44); 
+}
+
+.link_btn_color {
+  color: #ddf2f7 !important;
+}

@@ -16,7 +16,10 @@
 <div class="jumbotron">
   <h3>Intent Grid</h3>
   <hr>
-  <div class="container" ng-if="vmIntentGrid.filteredIntents.length > 0">
+  <div class="spinner" ng-show="vmIntentGrid.pageLoader"> 
+    <img src="/images/pageLoader.gif" alt="loading..."/>
+  </div>
+  <div class="container" ng-if="vmIntentGrid.filteredIntents.length > 0" ng-show="!vmIntentGrid.pageLoader">
     <table class="table-responsive table-condensed">
       <thead>
         <tr>
@@ -42,8 +45,11 @@
   <div ng-if="vmIntentGrid.filteredIntents.length == 0">
     No Record Found.
   </div>
-  <a href="#!/" style="float: left;" uib-tooltip="Goto Home" tooltip-placement="right">Back</a>
-  <button uib-tooltip="Save Intents" tooltip-placement="left" type="button" class="btn btn-link save_btn">Save <i style="margin-left: 5px;" class=" glyphicon glyphicon-save"></i></button>
+  <a href="/"  style="float: left;" uib-tooltip="Goto Home" tooltip-placement="right">Exit</a>
+  <div style="float: right;">
+    <button uib-tooltip="Save Intents" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmIntentGrid.trainModel()">Train Data <i style="margin-left: 5px;" class=" glyphicon glyphicon-phone"></i></button>
+    <button uib-tooltip="Save Intents" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmIntentGrid.saveJSON()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-save"></i></button>
+  </div>
 </div>
 <script type="text/ng-template" id="addEntity.html">
    <div class="modal-header">
@@ -120,7 +126,7 @@
     <div class="row" style="text-align: center">
       <div class="col-md-5">
         <label>Text</label>
-        <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text" placeholder="Text">
+        <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text" placeholder="Text">
       </div>
       <div class="col-md-1">
         <i ng-if="!vmIntentGrid.newIntentIcon" uib-tooltip="New Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-left" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
@@ -128,19 +134,19 @@
       </div>
       <div class="col-md-4">
         <label>Intent</label>
-        <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent"/>
-        <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="filter_intent"  style="color:black;" ng-model="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent">
+        <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent"/>
+        <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="filter_intent"  style="color:black;" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent">
           <option value="" selected>Choose Intent</option>
           <option ng-repeat="dropData in vmIntentGrid.dropdwonSourceData | unique:'intent'" value="{{dropData.intent}}">{{dropData.intent}}</option>
         </select>
       </div>
       <div class="col-md-2">
-        <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;" ng-click="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push({});"></i>
+        <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;" ng-click="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push({});"></i>
       </div>
     </div>
      <hr>
     <div class="container">
-      <table class="table table-striped" ng-if="vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.length > 0">
+      <table class="table table-striped" ng-if="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.length > 0">
         <thead>
           <tr>
             <th align="center">S.NO</th>
@@ -152,7 +158,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="entityData in vmIntentGrid.trainData.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities">
+          <tr ng-repeat="entityData in vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities">
             <td>{{$index+1}}</td>
             <td><input class="w3-input" type="text" ng-model="entityData.value"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
             <td><input class="w3-input" type="text" ng-model="entityData.entity"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
@@ -172,4 +178,26 @@
        </div>
      </div>
    </div>
+</script>
+<script type="text/ng-template" id="trainModel.html">
+   <div class="modal-header">
+    <span class="f-r">
+      <i class="glyphicon glyphicon-remove-sign close_icon" ng-click="vmIntentGrid.closePopup()"></i>
+    </span>
+    <h4 class="modal-title f-l my_model_title" id="myModalLabel"><i class="glyphicon glyphicon-transfer" style="margin-right:5px;"></i> Train Model</h4>
+   </div>
+   <div class="modal-body text-center">
+      <div class="input-group">
+        <span class="input-group-addon">Rasa URL</span>
+        <input id="rasa_url" ng-model="vmIntentGrid.rasa_url" type="text" class="form-control" name="msg" placeholder="Rasa server url">
+      </div>
+    </div>
+    <div class="row m-t-20">
+       <div class="col-xs-5 text-left">
+         <button class="btn  back_button cancel_back_btn" type="button" ng-click="vmIntentGrid.closePopup()">Cancel </button>
+       </div>
+       <div class="col-xs-7 text-right">
+         <button class="btn btn-info" type="button" ng-click="vmIntentGrid.startTraing()">Train <i class="glyphicon glyphicon-ok"></i></button>
+       </div>
+    </div>
 </script>
