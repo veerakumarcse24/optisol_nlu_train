@@ -33,13 +33,6 @@
           }
         }
 
-        vmIntentGrid.handler = function(selection) {
-          if(selection.text)
-          {
-            console.log(selection);
-          }
-        };
-
         /*vmIntentGrid.getData = function () {
 
     		   $http({
@@ -100,8 +93,54 @@
             }
         }
 
-        vmIntentGrid.addNewEntity = function (indexVal) {
-            vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].entities.push({});
+        vmIntentGrid.handler = function(selection, indexVal) {
+          if(selection.text)
+          {
+            var is_new = true;
+            angular.forEach(vmIntentGrid.paginizedData[indexVal].entities, function(value, key) {
+              if(value.value == selection.text)
+              {
+                is_new = false;
+              }
+            });
+            if(is_new)
+            {
+              vmIntentGrid.addNewIntentandEntity(indexVal, selection);
+            }
+          }
+        };
+
+        vmIntentGrid.newHandler = function(selection, indexVal) {
+          if(selection.text)
+          {
+            var is_new = true;
+            angular.forEach(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[indexVal].entities, function(value, key) {
+              if(value.value == selection.text)
+              {
+                is_new = false;
+              }
+            });
+            if(is_new)
+            {
+              vmIntentGrid.addNewIntentandEntity(indexVal, selection);
+            }
+          }
+        };
+
+        vmIntentGrid.addNewIntentandEntity = function (indexVal, selection) {
+            var tempJson = {};
+            tempJson.value = selection.text;
+            tempJson.start = selection.range.startOffset;
+            tempJson.end = selection.range.endOffset;
+            vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push(tempJson);
+        }
+
+        vmIntentGrid.addNewEntity = function (indexVal, selection) {
+            var tempJson = {};
+            tempJson.value = selection.text;
+            tempJson.start = selection.range.startOffset;
+            tempJson.end = selection.range.endOffset;
+            vmIntentGrid.paginizedData[indexVal].entities.push(tempJson);
         }
 
         vmIntentGrid.removeEntity = function (intentIndex, entityIndex) {

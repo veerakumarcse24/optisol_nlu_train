@@ -14,7 +14,7 @@
   </div>
 </div>
 <div class="jumbotron">
-  <h3>Intent Grid - {{vmIntentGrid.pageLoader}}</h3>
+  <h3>Intent Grid </h3>
   <hr>
   <div class="spinner" ng-show="vmIntentGrid.pageLoader"> 
     <img src="/images/pageLoader.gif" alt="loading..."/>
@@ -64,11 +64,11 @@
         <label>Text</label>
         <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].text" placeholder="Text">
       </div>
-      <div class="col-md-1">
+      <div class="col-md-2">
         <i ng-if="!vmIntentGrid.newIntentIcon" uib-tooltip="New Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-left" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
         <i ng-if="vmIntentGrid.newIntentIcon" uib-tooltip="Load Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-right" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-5">
         <label>Intent</label>
         <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent"/>
         <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="filter_intent"  style="color:black;" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].intent">
@@ -76,12 +76,12 @@
           <option ng-repeat="dropData in vmIntentGrid.dropdwonSourceData | unique:'intent'" value="{{dropData.intent}}">{{dropData.intent}}</option>
         </select>
       </div>
-      <div class="col-md-2">
-        <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;" ng-click="vmIntentGrid.addNewEntity(vmIntentGrid.selectedIndexVal)"></i>
-      </div>
+      <!-- <div class="col-md-2">
+        <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;"></i>
+      </div> -->
     </div>
-    <div style="margin-top:1em;">
-      <span>select Entity: </span> <span class="entityText" on-select="vmIntentGrid.handler(selection)" snap-to-word>{{vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].text}}<span>
+    <div style="margin-top:1em;" ng-show="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].text">
+      <span>Select Entity: </span> <span class="entityText" on-select="vmIntentGrid.handler(selection, vmIntentGrid.selectedIndexVal)" snap-to-word>{{vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].text}}<span>
     </div>
      <hr>
     <div class="container">
@@ -99,10 +99,10 @@
         <tbody>
           <tr ng-repeat="entityData in vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].entities">
             <td>{{$index+1}}</td>
-            <td><input class="w3-input" type="text" ng-model="entityData.value"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
-            <td><input class="w3-input" type="text" ng-model="entityData.entity"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
-            <td><input class="w3-input" type="number" ng-model="entityData.start"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
-            <td><input class="w3-input" type="number" ng-model="entityData.end"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" /></td>
+            <td><input class="w3-input" type="text" ng-model="entityData.value"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_value" ng-disabled="true" /></td>
+            <td><input class="w3-input" type="text" ng-model="entityData.entity"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_entity" /></td>
+            <td><input class="w3-input" type="number" ng-model="entityData.start"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_start" ng-disabled="true" /></td>
+            <td><input class="w3-input" type="number" ng-model="entityData.end"  name="{{vmIntentGrid.selectedIndexVal}}_{{$index}}_end" ng-disabled="true" /></td>
             <td><i class="glyphicon glyphicon-minus-sign pointer minus_size" ng-click="vmIntentGrid.removeEntity(vmIntentGrid.selectedIndexVal, $index)"></i></td>
           </tr>
         </tbody>
@@ -131,11 +131,11 @@
         <label>Text</label>
         <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text" placeholder="Text">
       </div>
-      <div class="col-md-1">
+      <div class="col-md-2">
         <i ng-if="!vmIntentGrid.newIntentIcon" uib-tooltip="New Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-left" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
         <i ng-if="vmIntentGrid.newIntentIcon" uib-tooltip="Load Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-right" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-5">
         <label>Intent</label>
         <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent"/>
         <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="filter_intent"  style="color:black;" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent">
@@ -143,9 +143,12 @@
           <option ng-repeat="dropData in vmIntentGrid.dropdwonSourceData | unique:'intent'" value="{{dropData.intent}}">{{dropData.intent}}</option>
         </select>
       </div>
-      <div class="col-md-2">
+      <!-- <div class="col-md-2">
         <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;" ng-click="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push({});"></i>
-      </div>
+      </div> -->
+    </div>
+    <div style="margin-top:1em;" ng-show="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text">
+      <span>Select Entity: </span> <span class="entityText" on-select="vmIntentGrid.newHandler(selection, vmIntentGrid.selectedIndexVal)" snap-to-word>{{vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text}}<span>
     </div>
      <hr>
     <div class="container">
