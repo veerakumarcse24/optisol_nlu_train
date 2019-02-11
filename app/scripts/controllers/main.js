@@ -33,7 +33,9 @@
 	    {
 
 	    	var keyData = document.getElementById('key_file_data').value;
-	    	if(keyData)
+            var checkData = JSON.parse(document.getElementById('key_file_data').value);
+
+	    	if(checkData && checkData.language && checkData.data.rasa_nlu_data)
 	    	{
 	    		vmMain.keyFileData = keyData;
 	    		MyService.update(vmMain.keyFileData);

@@ -33,6 +33,13 @@
           }
         }
 
+        vmIntentGrid.handler = function(selection) {
+          if(selection.text)
+          {
+            console.log(selection);
+          }
+        };
+
         /*vmIntentGrid.getData = function () {
 
     		   $http({

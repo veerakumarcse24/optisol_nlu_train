@@ -14,7 +14,7 @@
   </div>
 </div>
 <div class="jumbotron">
-  <h3>Intent Grid</h3>
+  <h3>Intent Grid - {{vmIntentGrid.pageLoader}}</h3>
   <hr>
   <div class="spinner" ng-show="vmIntentGrid.pageLoader"> 
     <img src="/images/pageLoader.gif" alt="loading..."/>
@@ -26,7 +26,7 @@
           <th align="center" width="5%">S.NO</th>
           <th align="center" width="45%">Intent</th>
           <th align="center" width="45%">Text</th>
-          <th align="center" width="5%">Entity</th>
+          <th align="center" width="5%">Edit</th>
           <th align="center" width="5%">Remove</th>
         </tr>
       </thead>
@@ -79,6 +79,9 @@
       <div class="col-md-2">
         <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;" ng-click="vmIntentGrid.addNewEntity(vmIntentGrid.selectedIndexVal)"></i>
       </div>
+    </div>
+    <div style="margin-top:1em;">
+      <span>select Entity: </span> <span class="entityText" on-select="vmIntentGrid.handler(selection)" snap-to-word>{{vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].text}}<span>
     </div>
      <hr>
     <div class="container">

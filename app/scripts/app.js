@@ -17,7 +17,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'ui.bootstrap',
-    'ngFlash'
+    'ngFlash',
+    'onSelect'
   ])
   .config(function ($routeProvider) {
     $routeProvider

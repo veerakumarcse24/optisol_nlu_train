@@ -73,3 +73,7 @@ select option {
     float: right !important;
     color: white !important;
 }
+
+.entityText {
+  color: DodgerBlue;
+}
