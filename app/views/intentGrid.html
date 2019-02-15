@@ -36,7 +36,7 @@
           <td><input readonly type="text" ng-model="intentData.intent" name="{{$index}}_intent" class="w3-input" /></td>
           <td><input readonly type="text" ng-model="intentData.text" name="{{$index}}_text" class="w3-input" /></td>
           <td><i uib-tooltip="Edit Entity" class="glyphicon glyphicon-edit icons_size pointer" style="color:#5ad870;" ng-click="vmIntentGrid.addIntent($index)" tooltip-placement="left"></i></td>
-          <td><i uib-tooltip="Remove Intent" class="glyphicon glyphicon-minus-sign icons_size pointer" style="color:#ea7d7d;" ng-click="vmIntentGrid.removeIntent($index)" tooltip-placement="left"></i></td>
+          <td><i uib-tooltip="Remove Intent" class="glyphicon glyphicon-minus-sign icons_size pointer" style="color:#ea7d7d;" ng-click="vmIntentGrid.removeIntent(intentData.text)" tooltip-placement="left"></i></td>
         </tr>
       </tbody>
     </table>

@@ -152,12 +152,19 @@
         }
 
 
-        vmIntentGrid.removeIntent = function (indexVal) {
-        	if (indexVal > -1) {
-        	  var target_index = ((vmIntentGrid.currentPage * vmIntentGrid.itemsPerPage) - vmIntentGrid.itemsPerPage) + indexVal;
+        vmIntentGrid.removeIntent = function (text) {
+          var index_id = -1;
+          angular.forEach(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples, function(value, key) {
+            if(value.text == text)
+            {
+              index_id = key;
+            }
+          });
+        	if (index_id > -1) {
+        	  var target_index = index_id;
               vmIntentGrid.trainData.data.rasa_nlu_data.common_examples.splice(target_index, 1);
         	  vmIntentGrid.searchMethod();
-            }
+          }
         }
 
         vmIntentGrid.paginationMethod = function()
