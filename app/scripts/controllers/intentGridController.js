@@ -66,6 +66,7 @@
         }
 
         vmIntentGrid.closePopup = function () {
+            vmIntentGrid.dropdwonSourceData = angular.copy(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples);
             UtilityService.closePopup();
         }
 
@@ -164,7 +165,7 @@
         	vmIntentGrid.paginizedData = [];
         	var start = (vmIntentGrid.currentPage * vmIntentGrid.itemsPerPage) - vmIntentGrid.itemsPerPage;
         	var destination = (vmIntentGrid.currentPage * vmIntentGrid.itemsPerPage) - 1;
-        	destination = (destination > vmIntentGrid.filteredIntents.length) ? (vmIntentGrid.filteredIntents.length - 1) : destination;
+        	destination = (destination > (vmIntentGrid.filteredIntents.length - 1)) ? (vmIntentGrid.filteredIntents.length - 1) : destination;
         	for(var i = start; i <= destination; i++)
         	{
         		vmIntentGrid.paginizedData.push(vmIntentGrid.filteredIntents[i]);

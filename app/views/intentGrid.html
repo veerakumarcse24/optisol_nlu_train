@@ -59,10 +59,12 @@
     <h4 class="modal-title f-l my_model_title" id="myModalLabel"><i class="glyphicon glyphicon-book"></i> Entity Details</h4>
    </div>
    <div class="modal-body text-center">
+    <form id="addEntity" class="row-eq-height" name="addEntity" ng-init="vmIntentGrid.submitted = false;"  role="form" novalidate ng-submit="addEntity.$valid && vmIntentGrid.closePopup()">
     <div class="row" style="text-align: center">
       <div class="col-md-5">
         <label>Text</label>
-        <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].text" placeholder="Text">
+        <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].text" placeholder="Text" required>
+        <span style="color:red;" ng-show="vmIntentGrid.submitted  && addEntity.selected_text.$invalid  && addEntity.selected_text.$error.required">Text is required.</span>
       </div>
       <div class="col-md-2">
         <i ng-if="!vmIntentGrid.newIntentIcon" uib-tooltip="New Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-left" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
@@ -70,11 +72,12 @@
       </div>
       <div class="col-md-5">
         <label>Intent</label>
-        <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent"/>
-        <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="filter_intent"  style="color:black;" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].intent">
+        <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent" required/>
+        <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="selected_intent"  style="color:black;" ng-model="vmIntentGrid.paginizedData[vmIntentGrid.selectedIndexVal].intent" required>
           <option value="" selected>Choose Intent</option>
           <option ng-repeat="dropData in vmIntentGrid.dropdwonSourceData | unique:'intent'" value="{{dropData.intent}}">{{dropData.intent}}</option>
         </select>
+        <span style="color:red;" ng-show="vmIntentGrid.submitted  && addEntity.selected_intent.$invalid  && addEntity.selected_intent.$error.required">Intent is required.</span>
       </div>
       <!-- <div class="col-md-2">
         <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;"></i>
@@ -113,7 +116,7 @@
          <button class="btn  back_button cancel_back_btn" type="button" ng-click="vmIntentGrid.revertEntity(vmIntentGrid.selectedIndexVal)">Cancel </button>
        </div>
        <div class="col-xs-7 text-right">
-         <button class="btn btn-info" type="button" ng-click="vmIntentGrid.closePopup()">Save <i class="glyphicon glyphicon-ok"></i></button>
+         <button class="btn btn-info" type="submit" ng-click="vmIntentGrid.submitted = true;">Save <i class="glyphicon glyphicon-ok"></i></button>
        </div>
      </div>
    </div>
@@ -126,10 +129,12 @@
     <h4 class="modal-title f-l my_model_title" id="myModalLabel"><i class="glyphicon glyphicon-folder-open" style="margin-right:5px;"></i> Create Intent</h4>
    </div>
    <div class="modal-body text-center">
+    <form id="addIntent" class="row-eq-height" name="addIntent" ng-init="vmIntentGrid.submitted = false;"  role="form" novalidate ng-submit="addIntent.$valid && vmIntentGrid.create_closePopup()">
     <div class="row" style="text-align: center">
       <div class="col-md-5">
         <label>Text</label>
-        <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text" placeholder="Text">
+        <input class="w3-input" type="text" name="selected_text" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].text" placeholder="Text" required>
+        <span style="color:red;" ng-show="vmIntentGrid.submitted  && addIntent.selected_text.$invalid  && addIntent.selected_text.$error.required">Text is required.</span>
       </div>
       <div class="col-md-2">
         <i ng-if="!vmIntentGrid.newIntentIcon" uib-tooltip="New Intent" tooltip-placement="left" class="glyphicon glyphicon-menu-left" style="margin-top:3em;" ng-click="vmIntentGrid.newIntentIcon = !vmIntentGrid.newIntentIcon;"></i>
@@ -137,11 +142,12 @@
       </div>
       <div class="col-md-5">
         <label>Intent</label>
-        <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent"/>
-        <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="filter_intent"  style="color:black;" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent">
+        <input ng-if="vmIntentGrid.newIntentIcon" class="w3-input" type="text" name="selected_intent" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent" placeholder="Intent" required />
+        <select ng-if="!vmIntentGrid.newIntentIcon" class="w3-select" name="selected_intent"  style="color:black;" ng-model="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].intent" required>
           <option value="" selected>Choose Intent</option>
           <option ng-repeat="dropData in vmIntentGrid.dropdwonSourceData | unique:'intent'" value="{{dropData.intent}}">{{dropData.intent}}</option>
         </select>
+        <span style="color:red;" ng-show="vmIntentGrid.submitted  && addIntent.selected_intent.$invalid  && addIntent.selected_intent.$error.required">Intent is required.</span>
       </div>
       <!-- <div class="col-md-2">
         <i uib-tooltip="Add Entity" class="glyphicon glyphicon-plus-sign icons_size pointer add-m-t" style="color:lightgreen;" ng-click="vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push({});"></i>
@@ -180,7 +186,7 @@
          <button class="btn  back_button cancel_back_btn" type="button" ng-click="vmIntentGrid.create_revertEntity(vmIntentGrid.selectedIndexVal)">Cancel </button>
        </div>
        <div class="col-xs-7 text-right">
-         <button class="btn btn-info" type="button" ng-click="vmIntentGrid.create_closePopup()">Save <i class="glyphicon glyphicon-ok"></i></button>
+         <button class="btn btn-info" type="submit" ng-click="vmIntentGrid.submitted = true;">Save <i class="glyphicon glyphicon-ok"></i></button>
        </div>
      </div>
    </div>
