@@ -7,10 +7,11 @@
 
 body {
   padding: 0;
-  background-image: url("../images/background_img.jpg");
+  /*background-image: url("../images/background_img.jpg");
   background-repeat: no-repeat;
   background-position: right top;
-  background-attachment: fixed;
+  background-attachment: fixed;*/
+  background-color: #23423c !important;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */

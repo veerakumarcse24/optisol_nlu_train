@@ -122,6 +122,7 @@
             });
             if(is_new)
             {
+              console.log(selection);
               vmIntentGrid.addNewIntentandEntity(indexVal, selection);
             }
           }
@@ -132,7 +133,7 @@
             tempJson.value = selection.text;
             tempJson.start = selection.range.startOffset;
             tempJson.end = selection.range.endOffset;
-            vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push(tempJson);
+            $scope.$apply(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push(tempJson));
         }
 
         vmIntentGrid.addNewEntity = function (indexVal, selection) {
