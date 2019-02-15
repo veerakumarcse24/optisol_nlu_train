@@ -106,7 +106,7 @@
             });
             if(is_new)
             {
-              vmIntentGrid.addNewIntentandEntity(indexVal, selection);
+              vmIntentGrid.addNewEntity(indexVal, selection);
             }
           }
         };
@@ -123,7 +123,6 @@
             });
             if(is_new)
             {
-              console.log(selection);
               vmIntentGrid.addNewIntentandEntity(indexVal, selection);
             }
           }
@@ -134,6 +133,10 @@
             tempJson.value = selection.text;
             tempJson.start = selection.range.startOffset;
             tempJson.end = selection.range.endOffset;
+            if(!vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities)
+            {
+              vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities = [];
+            }
             $scope.$apply(vmIntentGrid.trainData.data.rasa_nlu_data.common_examples[vmIntentGrid.selectedIndexVal].entities.push(tempJson));
         }
 
@@ -142,7 +145,11 @@
             tempJson.value = selection.text;
             tempJson.start = selection.range.startOffset;
             tempJson.end = selection.range.endOffset;
-            vmIntentGrid.paginizedData[indexVal].entities.push(tempJson);
+            if(!vmIntentGrid.paginizedData[indexVal].entities)
+            {
+              vmIntentGrid.paginizedData[indexVal].entities = [];
+            }
+            $scope.$apply(vmIntentGrid.paginizedData[indexVal].entities.push(tempJson));
         }
 
         vmIntentGrid.removeEntity = function (intentIndex, entityIndex) {
