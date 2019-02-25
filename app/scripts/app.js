@@ -18,7 +18,8 @@ angular
     'ngTouch',
     'ui.bootstrap',
     'ngFlash',
-    'onSelect'
+    'onSelect',
+    'ng.ckeditor'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -36,6 +37,11 @@ angular
         templateUrl: 'views/intentGrid.html',
         controller: 'IntentGridCtrl',
         controllerAs: 'vmIntentGrid'
+      })
+      .when('/story_pad', {
+        templateUrl: 'views/storyPad.html',
+        controller: 'StorypadCtrl',
+        controllerAs: 'vmStorypad'
       })
       .otherwise({
         redirectTo: '/'

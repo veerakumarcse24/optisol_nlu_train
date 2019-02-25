@@ -32,6 +32,8 @@ module.exports = function(config) {
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-flash-alert/dist/angular-flash.js',
       'bower_components/angular-onselect/dist/angular-onselect.js',
+      'bower_components/ckeditor/ckeditor.js',
+      'bower_components/ng-ckeditor/dist/ng-ckeditor.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
