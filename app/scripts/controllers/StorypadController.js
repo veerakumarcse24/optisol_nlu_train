@@ -50,9 +50,6 @@
           }else if(tab === 'domain')
           {
             reader.onload = vmStorypad.onReaderLoad_domain;
-          }else if(tab === 'reply')
-          {
-            reader.onload = vmStorypad.onReaderLoad_reply;
           }
           reader.readAsText($files[0]);
         }
@@ -71,13 +68,6 @@
             output.value = keyData;
         }
 
-        vmStorypad.onReaderLoad_reply = function onReaderLoad(event){
-
-            var keyData = event.target.result;
-            var output = document.getElementById('reply_pad');
-            output.value = keyData;
-        }
-
         vmStorypad.saveConfigFile = function() {
           // var json = vmIntentGrid.trainData;
           // var jsonse = JSON.stringify(json);
@@ -88,14 +78,29 @@
           saveAs(blob, $scope.filename + ".yml");
         }
 
-        vmStorypad.saveReplyFile = function() {
-          // var json = vmIntentGrid.trainData;
-          // var jsonse = JSON.stringify(json);
-          var blob = new Blob([vmStorypad.replyFile], {
-            type: "application/text"
-          });
-          $scope.filename = $scope.filename || "my_reply";
-          saveAs(blob, $scope.filename + ".md");
+        vmStorypad.trainStory = function() {
+            if(!vmStorypad.storiesFile || !vmStorypad.domainFile)
+            {
+                var message = 'Please check stories and domain files.';
+                Flash.create('info', message);
+                return false;
+            }
+            var dataObj = {
+                'storyFile': vmStorypad.storiesFile,
+                'domainFile': vmStorypad.domainFile
+            };
+            vmStorypad.pageLoader = true;
+            TrainServices.story_train(dataObj, function (response) {
+                var res = response.data;
+                vmStorypad.pageLoader = false;
+                if (res.Status == 'success') {
+                    var message = res.data;
+                    Flash.create('success', message);
+                } else {
+                    var message = 'Some thing went wrong';
+                    Flash.create('danger', message);
+                }
+            });
         }
        
         vmStorypad.onInit();
