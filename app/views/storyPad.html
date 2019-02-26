@@ -1,4 +1,18 @@
-<h1>Welcome</h1>
+<div class="storypad">
+	<ul class="nav nav-tabs">
+	  <li ng-class="{active: (vmStorypad.tab == 1)}"><a href="javascript:void(0)" ng-click="vmStorypad.storyTabChange(1)">Story</a></li>
+	  <li ng-class="{active: (vmStorypad.tab == 2)}"><a href="javascript:void(0)" ng-click="vmStorypad.storyTabChange(2)">Domain</a></li>
+	</ul>
+	<div ng-show="vmStorypad.tab == 1">
+		<h3 align="center" style="color: #fff">Create Stories</h3>
+		<ng-ckeditor ng-model="vmStorypad.storiesFile" skin="moono" remove-buttons="Image" remove-plugins="iframe,flash,smiley" msn-count="
+	Number of typed characters:"></ng-ckeditor>
+	<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveStoryFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-save"></i></button>
+	</div>
+	<div ng-show="vmStorypad.tab == 2" class="mdEditorDiv form-group">
+		<h3 align="center" style="color: #fff">Create Domain.yml</h3>
+		<textarea class="form-control" id="exampleFormControlTextarea3" ng-model="vmStorypad.configFile" rows="10"></textarea>
+		<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveConfigFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-save"></i></button>
 
-<ng-ckeditor ng-model="htmlEditor" skin="moono" remove-buttons="Image" remove-plugins="iframe,flash,smiley" msn-count="
-Number of typed characters:"></ng-ckeditor>
+	</div>
+</div>
