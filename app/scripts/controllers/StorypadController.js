@@ -42,13 +42,59 @@
           saveAs(blob, $scope.filename + ".md");
         }
 
+        vmStorypad.uploadStoryFile = function($files, tab) {
+          var reader = new FileReader();
+          if(tab === 'story')
+          {
+            reader.onload = vmStorypad.onReaderLoad_story;
+          }else if(tab === 'domain')
+          {
+            reader.onload = vmStorypad.onReaderLoad_domain;
+          }else if(tab === 'reply')
+          {
+            reader.onload = vmStorypad.onReaderLoad_reply;
+          }
+          reader.readAsText($files[0]);
+        }
+
+        vmStorypad.onReaderLoad_story = function onReaderLoad(event){
+
+            var keyData = event.target.result;
+            var output = document.getElementById('story_pad');
+            output.value = keyData;
+        }
+
+        vmStorypad.onReaderLoad_domain = function onReaderLoad(event){
+
+            var keyData = event.target.result;
+            var output = document.getElementById('domain_pad');
+            output.value = keyData;
+        }
+
+        vmStorypad.onReaderLoad_reply = function onReaderLoad(event){
+
+            var keyData = event.target.result;
+            var output = document.getElementById('reply_pad');
+            output.value = keyData;
+        }
+
         vmStorypad.saveConfigFile = function() {
           // var json = vmIntentGrid.trainData;
           // var jsonse = JSON.stringify(json);
-          var blob = new Blob([vmStorypad.configFile], {
+          var blob = new Blob([vmStorypad.domainFile], {
             type: "application/text"
           });
-          $scope.filename = $scope.filename || "my_stories";
+          $scope.filename = $scope.filename || "my_domain";
+          saveAs(blob, $scope.filename + ".yml");
+        }
+
+        vmStorypad.saveReplyFile = function() {
+          // var json = vmIntentGrid.trainData;
+          // var jsonse = JSON.stringify(json);
+          var blob = new Blob([vmStorypad.replyFile], {
+            type: "application/text"
+          });
+          $scope.filename = $scope.filename || "my_reply";
           saveAs(blob, $scope.filename + ".md");
         }
        

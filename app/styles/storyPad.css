@@ -4,3 +4,12 @@
 .mdEditorDiv{
 	color: black;
 }
+
+.create_story{
+	width: 100%;
+	overflow: auto;
+	font-family:Courier, monospace;
+	font-weight:normal;
+	font-size:20px;
+	background-image:url(../images/paper.png);
+}

@@ -2,17 +2,44 @@
 	<ul class="nav nav-tabs">
 	  <li ng-class="{active: (vmStorypad.tab == 1)}"><a href="javascript:void(0)" ng-click="vmStorypad.storyTabChange(1)">Story</a></li>
 	  <li ng-class="{active: (vmStorypad.tab == 2)}"><a href="javascript:void(0)" ng-click="vmStorypad.storyTabChange(2)">Domain</a></li>
+	  <li ng-class="{active: (vmStorypad.tab == 3)}"><a href="javascript:void(0)" ng-click="vmStorypad.storyTabChange(3)">UserReply</a></li>
 	</ul>
-	<div ng-show="vmStorypad.tab == 1">
-		<h3 align="center" style="color: #fff">Create Stories</h3>
-		<ng-ckeditor ng-model="vmStorypad.storiesFile" skin="moono" remove-buttons="Image" remove-plugins="iframe,flash,smiley" msn-count="
-	Number of typed characters:"></ng-ckeditor>
-	<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveStoryFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-save"></i></button>
-	</div>
-	<div ng-show="vmStorypad.tab == 2" class="mdEditorDiv form-group">
-		<h3 align="center" style="color: #fff">Create Domain.yml</h3>
-		<textarea class="form-control" id="exampleFormControlTextarea3" ng-model="vmStorypad.configFile" rows="10"></textarea>
-		<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveConfigFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-save"></i></button>
 
+	<div ng-show="vmStorypad.tab == 1" class="mdEditorDiv form-group">
+		<!-- <ng-ckeditor ng-model="vmStorypad.storiesFile" skin="moono" remove-buttons="Image" remove-plugins="iframe,flash,smiley" msn-count="
+	Number of typed characters:"></ng-ckeditor> -->
+		<textarea class="create_story" id="story_pad" ng-model="vmStorypad.storiesFile" wrap="off" placeholder="Create stories here..." rows="16" ></textarea>
+		<div style="float: left;">
+			<button uib-tooltip="Upload Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" onclick="document.getElementById('story_id_docfile').click()">Upload File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
+			<input id="story_id_docfile" type="file" style="display:none;" accept=".md" name="docfile" 
+		     ng-files="vmStorypad.uploadStoryFile($files, 'story')">
+		</div>
+		<div style="float: right;">
+			<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveStoryFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-download"></i></button>
+		</div>
+	</div>
+
+	<div ng-show="vmStorypad.tab == 2" class="mdEditorDiv form-group">
+		<textarea class="create_story" id="domain_pad" ng-model="vmStorypad.domainFile" wrap="off" placeholder="Make domain here..." rows="16" ></textarea>
+		<div style="float: left;">
+			<button uib-tooltip="Upload Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" onclick="document.getElementById('domain_id_docfile').click()">Upload File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
+			<input id="domain_id_docfile" type="file" style="display:none;" accept=".yml" name="docfile" 
+		     ng-files="vmStorypad.uploadStoryFile($files, 'domain')">
+		</div>
+		<div style="float: right;">
+			<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveConfigFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-download"></i></button>
+		</div>
+	</div>
+
+	<div ng-show="vmStorypad.tab == 3" class="mdEditorDiv form-group">
+		<textarea class="create_story" id="reply_pad" ng-model="vmStorypad.replyFile" wrap="off" placeholder="Create reply here..." rows="16" ></textarea>
+		<div style="float: left;">
+			<button uib-tooltip="Upload Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" onclick="document.getElementById('reply_id_docfile').click()">Upload File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
+			<input id="reply_id_docfile" type="file" style="display:none;" accept=".md" name="docfile" 
+		     ng-files="vmStorypad.uploadStoryFile($files, 'reply')">
+		</div>
+		<div style="float: right;">
+			<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveReplyFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-download"></i></button>
+		</div>
 	</div>
 </div>
