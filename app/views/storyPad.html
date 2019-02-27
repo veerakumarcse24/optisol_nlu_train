@@ -19,9 +19,10 @@
 	Number of typed characters:"></ng-ckeditor> -->
 		<textarea class="create_story" id="story_pad" ng-model="vmStorypad.storiesFile" wrap="off" placeholder="Create stories here..." rows="16" ></textarea>
 		<div style="float: left;">
-			<button uib-tooltip="Upload Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" onclick="document.getElementById('story_id_docfile').click()">Upload File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
+			<button uib-tooltip="Upload Local Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" onclick="document.getElementById('story_id_docfile').click()">Upload Local File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
 			<input id="story_id_docfile" type="file" style="display:none;" accept=".md" name="docfile" 
 		     ng-files="vmStorypad.uploadStoryFile($files, 'story')">
+		     <button uib-tooltip="Upload Server Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.uploadServerStory()">Upload Server File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
 		</div>
 		<div style="float: right;">
 			<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveStoryFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-download"></i></button>
@@ -31,9 +32,10 @@
 	<div ng-show="vmStorypad.tab == 2" class="mdEditorDiv form-group">
 		<textarea class="create_story" id="domain_pad" ng-model="vmStorypad.domainFile" wrap="off" placeholder="Make domain here..." rows="16" ></textarea>
 		<div style="float: left;">
-			<button uib-tooltip="Upload Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" onclick="document.getElementById('domain_id_docfile').click()">Upload File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
+			<button uib-tooltip="Upload Local DomailFile" tooltip-placement="left" type="button" class="btn btn-link save_btn" onclick="document.getElementById('domain_id_docfile').click()">Upload Local File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
 			<input id="domain_id_docfile" type="file" style="display:none;" accept=".yml" name="docfile" 
 		     ng-files="vmStorypad.uploadStoryFile($files, 'domain')">
+		     <button uib-tooltip="Upload Server DomailFile" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.uploadServerDomainFile()">Upload Server File<i style="margin-left: 5px;" class="glyphicon glyphicon-upload"></i></button>
 		</div>
 		<div style="float: right;">
 			<button uib-tooltip="Save Stories" tooltip-placement="left" type="button" class="btn btn-link save_btn" ng-click="vmStorypad.saveConfigFile()">Save Local <i style="margin-left: 5px;" class="glyphicon glyphicon-download"></i></button>

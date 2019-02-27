@@ -78,6 +78,36 @@
           saveAs(blob, $scope.filename + ".yml");
         }
 
+        vmStorypad.uploadServerStory = function() {
+            vmStorypad.pageLoader = true;
+            TrainServices.uploadServerStory(function (response) {
+                vmStorypad.pageLoader = false;
+                if (response.status == 200) {
+                    vmStorypad.storiesFile = response.data;
+                    var message = 'Success.';
+                    Flash.create('success', message);
+                } else {
+                    var message = 'Some thing went wrong';
+                    Flash.create('danger', message);
+                }
+            });
+        }
+
+        vmStorypad.uploadServerDomainFile = function() {
+            vmStorypad.pageLoader = true;
+            TrainServices.uploadServerDomainFile(function (response) {
+                vmStorypad.pageLoader = false;
+                if (response.status == 200) {
+                    vmStorypad.domainFile = response.data;
+                    var message = 'Success.';
+                    Flash.create('success', message);
+                } else {
+                    var message = 'Some thing went wrong';
+                    Flash.create('danger', message);
+                }
+            });
+        }
+
         vmStorypad.trainStory = function() {
             if(!vmStorypad.storiesFile || !vmStorypad.domainFile)
             {

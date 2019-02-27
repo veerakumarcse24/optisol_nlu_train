@@ -19,15 +19,27 @@
             });
         };
 
-        vmTrainService.story_train = function (dataObj, callback) {
-          /*$http.post('http://localhost:9143/save_story_data', dataObj)
+        vmTrainService.uploadServerStory = function (callback) {
+          $http.post('http://localhost:9143/get_stories')
              .then(function (response) {
                  callback(response);
              },
              function (response) {
                  callback(response);
-            });*/
+            });
+        };
 
+        vmTrainService.uploadServerDomainFile = function (callback) {
+          $http.post('http://localhost:9143/get_domain_yml')
+             .then(function (response) {
+                 callback(response);
+             },
+             function (response) {
+                 callback(response);
+            });
+        };
+
+        vmTrainService.story_train = function (dataObj, callback) {
             $http({
                 method: 'POST',
                 url: 'http://localhost:9143/save_story_data',

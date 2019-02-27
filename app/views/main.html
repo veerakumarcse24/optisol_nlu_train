@@ -12,10 +12,10 @@
      ng-files="vmMain.getTheFiles($files)">
      <input type="text" style="display:none;"  id="key_file_data">
   </p>
-  <p>
+  <p style="margin-left: 1em;">
     <a href="#!/story_pad"><u>Create Story </u>
     </a>
-    <button class="btn btn-link link_btn_color" style="margin-left: -1em;" ng-click="vmMain.validateKeyFile()"><i class="glyphicon glyphicon-book"></i></button>
+    <button class="btn btn-link link_btn_color" style="margin-left: 1em;"><i class="glyphicon glyphicon-book"></i></button>
   </p>
   <p ng-if="vmMain.keyFileData"><a class="btn btn-success" ng-href="#!/intent_grid">Training Model  <span class="glyphicon glyphicon-cog"></span></a></p>
 </div>

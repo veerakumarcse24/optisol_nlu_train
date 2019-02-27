@@ -217,6 +217,30 @@ class RasaNLU(object):
         """Main Rasa route to check if the server is online"""
         return "hello from Rasa NLU: " + __version__
 
+    @app.route("/get_stories", methods=['GET', 'POST', 'OPTIONS'])
+    @check_cors
+    def get_stories(self, request):
+        try:
+            BASE = os.getcwd()
+            file_path = open(os.path.join(BASE + '/veera/user_stories.md'), "r")
+            content = file_path.read()
+            file_path.close()
+            return content
+        except Exception as e:
+            return e
+
+    @app.route("/get_domain_yml", methods=['GET', 'POST', 'OPTIONS'])
+    @check_cors
+    def get_domain_yml(self, request):
+        try:
+            BASE = os.getcwd()
+            file_path = open(os.path.join(BASE + '/veera/domain.yml'), "r")
+            content = file_path.read()
+            file_path.close()
+            return content
+        except Exception as e:
+            return e
+
     @app.route("/save_story_data", methods=['GET', 'POST', 'OPTIONS'])
     @check_cors
     def save_story_data(self, request):
@@ -236,6 +260,7 @@ class RasaNLU(object):
         file_path1 = open(os.path.join(BASE + '/veera/domain.yml'), "w+")
         file_path1.write(request_params.get('domainFile'))
         file_path1.close()
+        #os.system('python -m rasa_nlu.server --path projects')
         data = {'Status': 'success', 'data': 'Data saved successfully.'}
         return json_to_string(data)
 
